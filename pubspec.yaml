@@ -1,0 +1,105 @@
+name: flutter_riverpod_template
+description: "A new Flutter project."
+
+publish_to: 'none' 
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.8.1
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # main state management use 
+  flutter_riverpod: ^2.6.1
+  # route related 
+  go_router: ^16.0.0
+
+  # storage
+  hive: ^2.2.3
+  path_provider: ^2.1.5
+
+  # api services
+  dio: ^5.9.0
+  http_parser: ^4.1.2
+  mime: ^2.0.0
+  pretty_dio_logger: ^1.4.0
+  socket_io_client: ^3.1.2
+  connectivity_plus: ^6.1.4
+
+  # time zone related 
+  flutter_timezone: ^4.1.1
+  timezone: ^0.10.1
+
+  # image related 
+  cached_network_image: ^3.4.1
+  flutter_cache_manager: ^3.4.1
+  image_picker: ^1.1.2
+
+  # ui related
+  permission_handler: ^12.0.1
+  readmore: ^3.0.0
+  skeletonizer: ^2.1.0+1
+
+  # notification related
+  flutter_local_notifications: ^19.2.1
+  firebase_messaging: ^15.2.6
+  firebase_core: ^3.13.1
+  flutter_native_splash: ^2.4.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+  flutter_lints: ^5.0.0
+  change_app_package_name: ^1.5.0
+
+# native splash screen configure
+flutter_native_splash:
+  color: "#9558B7"
+  color_dark: "#9558B7"
+  android: true
+  ios: true
+  image: assets/images/native_logo.png
+  image_dark: assets/images/native_logo.png
+  background_image: assets/images/native_plash.png
+  background_image_dark: assets/images/native_plash.png
+  android_gravity: center
+  ios_content_mode: scaleAspectFit
+  fullscreen: true  
+
+android_12:
+  color: "#9558B7"
+  color_dark: "#9558B7"
+  android: true
+  ios: true
+  image: assets/images/native_logo.png
+  image_dark: assets/images/native_logo.png
+  background_image: assets/images/native_plash.png
+  background_image_dark: assets/images/native_plash.png
+  android_gravity: center
+  ios_content_mode: scaleAspectFit
+  fullscreen: true  
+
+flutter:
+
+  uses-material-design: true
+
+# local all assets
+  assets:
+    - assets/fonts/
+    - assets/logo/
+    - assets/images/
+
+# local all font 
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fonts/Poppins-Black.ttf
+        - asset: assets/fonts/Poppins-Bold.ttf
+        - asset: assets/fonts/Poppins-Light.ttf
+        - asset: assets/fonts/Poppins-Medium.ttf
+        - asset: assets/fonts/Poppins-Regular.ttf
