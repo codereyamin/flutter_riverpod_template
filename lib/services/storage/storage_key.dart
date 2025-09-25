@@ -4,6 +4,7 @@ class StorageKey {
   static StorageKey get instance => _storageKey;
 
   final String storageContainerKey = "storageContainerKey";
+  final String loginDataStore = "loginDataStore";
   final String token = "token";
   final String refreshToken = "refreshToken";
   final String user = "user";

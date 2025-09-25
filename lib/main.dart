@@ -3,8 +3,11 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod_template/constant/app_colors.dart';
 import 'package:flutter_riverpod_template/main_app_entry.dart';
 import 'package:flutter_riverpod_template/services/storage/storage_services.dart';
+import 'package:flutter_riverpod_template/utils/observer/logger_ob_server.dart';
 import 'package:flutter_riverpod_template/widgets/texts/app_date_time_formate.dart';
 
 Future<void> main() async {
@@ -14,12 +17,23 @@ Future<void> main() async {
   ///////////native splash
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   ///////////// devices orientation set
-  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown]);
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitDown, DeviceOrientation.portraitUp]);
+  //////////// app navigation style set
+  SystemChrome.setSystemUIOverlayStyle(
+    SystemUiOverlayStyle(
+      systemNavigationBarColor: AppColors.instance.transparent,
+      statusBarColor: AppColors.instance.transparent,
+      statusBarBrightness: Brightness.light,
+      statusBarIconBrightness: Brightness.dark,
+      systemNavigationBarIconBrightness: Brightness.dark,
+      systemNavigationBarDividerColor: Colors.transparent,
+    ),
+  );
   ////////////// network
   HttpOverrides.global = MyHttpOverrides();
   //////////////////// storage services Initialize
   await StorageServices.instance.init();
-  runApp(const MainAppEntry());
+  runApp(ProviderScope(observers: [LoggerObServer()], child: const MainAppEntry()));
   ////////// time formate
   await AppDateTimeFormate.instance.initial();
   ///////////native splash remove

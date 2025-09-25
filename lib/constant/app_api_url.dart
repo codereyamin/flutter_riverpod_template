@@ -18,6 +18,16 @@ class AppApiUrl {
   String termsAndConditions = "/rule/terms-and-conditions";
   String faq = "/faq";
   String notification = "/notification";
+  ////////////
+  String login = "/login";
+  String authDeleteAccount = "/authDeleteAccount";
+  String user = "/user";
+  String changePassword = "/changePassword";
+  String userResendOtp = "/userResendOtp";
+  String authOtpVerify = "/authOtpVerify";
+  String authForgotPassword = "/authForgotPassword";
+  String authVerifyEmail = "/authVerifyEmail";
+  String authResetPassword = "/authResetPassword";
 }
 
 String _getDomain() {

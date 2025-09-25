@@ -200,10 +200,9 @@ class _FullScreenImageViewerState extends State<FullScreenImageViewer> with Sing
 
   Matrix4 _applyZoom() {
     final tapPosition = doubleTapDetails!.localPosition;
-    const translationCorrection = 2 - 1; // This is effectively 1, which can be removed for clarity.
     final zoomed = Matrix4.identity()
-      ..translate(-tapPosition.dx * translationCorrection, -tapPosition.dy * translationCorrection)
-      ..scale(2.0); // Ensure you pass a double value for the scaling factor.
+      ..translateByDouble(-tapPosition.dx, -tapPosition.dy, 0.0, 0.0)
+      ..scaleByDouble(2.0, 2.0, 1.0, 1.0);
     return zoomed;
   }
 

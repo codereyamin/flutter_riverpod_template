@@ -18,8 +18,7 @@ dependencies:
   go_router: ^16.0.0
 
   # storage
-  hive: ^2.2.3
-  path_provider: ^2.1.5
+  get_storage: ^2.1.1
 
   # api services
   dio: ^5.9.0
@@ -42,11 +41,14 @@ dependencies:
   permission_handler: ^12.0.1
   readmore: ^3.0.0
   skeletonizer: ^2.1.0+1
+  flutter_widget_from_html_core: ^0.17.0
+  cupertino_icons: ^1.0.8
 
   # notification related
   flutter_local_notifications: ^19.2.1
-  firebase_messaging: ^15.2.6
-  firebase_core: ^3.13.1
+  firebase_messaging: ^16.0.1
+  firebase_core: ^4.1.0
+  device_info_plus: ^12.1.0
   flutter_native_splash: ^2.4.6
 
 dev_dependencies:

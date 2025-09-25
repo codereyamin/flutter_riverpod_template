@@ -1,5 +1,14 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod_template/error_handling_screen/not_found_screen.dart';
+import 'package:flutter_riverpod_template/routes/app_routes_key.dart';
+import 'package:flutter_riverpod_template/routes/internet_check_provider.dart';
+import 'package:flutter_riverpod_template/screens/splash_screen/splash_screen.dart';
 import 'package:flutter_riverpod_template/utils/app_log.dart';
 import 'package:go_router/go_router.dart';
+
+final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
 
 class AppRoutes {
   ////////////// constructor
@@ -7,15 +16,50 @@ class AppRoutes {
   static final AppRoutes _instance = AppRoutes._privateConstructor();
   static AppRoutes get instance => _instance;
   //////////////// routes
-  late GoRouter _router;
 
-  void setRouter(GoRouter router) {
-    _router = router;
-  }
+  GoRouter router = GoRouter(
+    navigatorKey: rootNavigatorKey,
+    debugLogDiagnostics: kDebugMode,
+    initialLocation: AppRoutesKey.instance.initial,
+    routes: [
+      GoRoute(path: AppRoutesKey.instance.initial, name: AppRoutesKey.instance.splash, builder: (context, state) => SplashScreen()),
+      GoRoute(
+        path: "/${AppRoutesKey.instance.notFoundScreen}",
+        name: AppRoutesKey.instance.noInternetScreen,
+        builder: (context, state) => SplashScreen(),
+      ),
+    ],
+    errorBuilder: (context, state) {
+      return NotFoundScreen();
+    },
+    redirect: (context, state) {
+      final container = ProviderScope.containerOf(context, listen: false);
+      final asyncStatus = container.read(internetStatusProvider);
+
+      if (asyncStatus.isLoading) return null;
+      if (asyncStatus.hasError) return "/${AppRoutesKey.instance.errorScreen}";
+
+      final isOnline = asyncStatus.value ?? true;
+      final goingToNoInternet = state.name == AppRoutesKey.instance.noInternetScreen;
+
+      if (!isOnline && !goingToNoInternet) {
+        return "/${AppRoutesKey.instance.noInternetScreen}";
+      }
+
+      if (isOnline && goingToNoInternet) {
+        return "/"; // initial route
+      }
+
+      return null;
+    },
+  );
+
+  ////////////////////. route operation start
+  String _normalize(String value) => value.startsWith("/") ? value : "/$value";
 
   void go(String value) {
     try {
-      _router.go(value);
+      router.go(_normalize(value));
     } catch (e) {
       errorLog("goNamed", e);
     }
@@ -29,7 +73,7 @@ class AppRoutes {
     String? fragment,
   }) {
     try {
-      _router.goNamed(value, pathParameters: pathParameters, extra: extra, fragment: fragment, queryParameters: queryParameters);
+      router.goNamed(value, pathParameters: pathParameters, extra: extra, fragment: fragment, queryParameters: queryParameters);
     } catch (e) {
       errorLog("goNamed", e);
     }
@@ -37,7 +81,7 @@ class AppRoutes {
 
   void replace(String value, {Object? extra}) {
     try {
-      _router.replace(value, extra: extra);
+      router.replace(_normalize(value), extra: extra);
     } catch (e) {
       errorLog("replaceNamed", e);
     }
@@ -50,7 +94,7 @@ class AppRoutes {
     Object? extra,
   }) {
     try {
-      _router.replaceNamed(value, pathParameters: pathParameters, extra: extra, queryParameters: queryParameters);
+      router.replaceNamed(value, pathParameters: pathParameters, extra: extra, queryParameters: queryParameters);
     } catch (e) {
       errorLog("replaceNamed", e);
     }
@@ -63,7 +107,7 @@ class AppRoutes {
     Object? extra,
   }) {
     try {
-      _router.push(value, extra: extra);
+      router.push(_normalize(value), extra: extra);
     } catch (e) {
       errorLog("push", e);
     }
@@ -76,20 +120,15 @@ class AppRoutes {
     Object? extra,
   }) {
     try {
-      _router.pushNamed(value, pathParameters: pathParameters, extra: extra, queryParameters: queryParameters);
+      router.pushNamed(value, pathParameters: pathParameters, extra: extra, queryParameters: queryParameters);
     } catch (e) {
       errorLog("pushNamed", e);
     }
   }
 
-  void pushReplacement(
-    String value, {
-    Map<String, String> pathParameters = const <String, String>{},
-    Map<String, dynamic> queryParameters = const <String, dynamic>{},
-    Object? extra,
-  }) {
+  void pushReplacement(String value, {Object? extra}) {
     try {
-      _router.pushReplacement(value, extra: extra);
+      router.pushReplacement(_normalize(value), extra: extra);
     } catch (e) {
       errorLog("pushReplacement", e);
     }
@@ -102,9 +141,19 @@ class AppRoutes {
     Object? extra,
   }) {
     try {
-      _router.pushReplacementNamed(value, pathParameters: pathParameters, extra: extra, queryParameters: queryParameters);
+      router.pushReplacementNamed(value, pathParameters: pathParameters, extra: extra, queryParameters: queryParameters);
     } catch (e) {
       errorLog("pushReplacementNamed", e);
     }
   }
+
+  void pop() {
+    try {
+      GoRouter.of(rootNavigatorKey.currentContext!).pop();
+    } catch (e) {
+      errorLog("pop", e);
+    }
+  }
+
+  ////////////////////. route operation end
 }

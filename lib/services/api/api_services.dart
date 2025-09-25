@@ -40,7 +40,7 @@ class ApiServices {
       if (e.response.runtimeType != Null) {
         if (e.response?.statusCode == 401) {
           await storageServices.logout();
-          appRoutes.pushReplacement(AppRoutesKey.instance.loginScreen);
+          appRoutes.pushReplacement(AppRoutesKey.instance.splash);
         }
 
         if (e.response?.data["message"].runtimeType != Null) {
@@ -82,7 +82,7 @@ class ApiServices {
       if (e.response.runtimeType != Null) {
         if (e.response?.statusCode == 401) {
           await storageServices.logout();
-          appRoutes.pushReplacement(AppRoutesKey.instance.loginScreen);
+          appRoutes.pushReplacement(AppRoutesKey.instance.splash);
         }
 
         if (e.response?.data["message"].runtimeType != Null) {
@@ -118,7 +118,7 @@ class ApiServices {
       if (e.response.runtimeType != Null) {
         if (e.response?.statusCode == 401) {
           await storageServices.logout();
-          appRoutes.pushReplacement(AppRoutesKey.instance.loginScreen);
+          appRoutes.pushReplacement(AppRoutesKey.instance.splash);
         }
 
         if (e.response?.data["message"].runtimeType != Null) {
@@ -156,7 +156,7 @@ class ApiServices {
       if (e.response.runtimeType != Null) {
         if (e.response?.statusCode == 401) {
           await storageServices.logout();
-          appRoutes.pushReplacement(AppRoutesKey.instance.loginScreen);
+          appRoutes.pushReplacement(AppRoutesKey.instance.splash);
         }
 
         if (e.response?.data["message"].runtimeType != Null) {
@@ -194,7 +194,7 @@ class ApiServices {
       if (e.response.runtimeType != Null) {
         if (e.response?.statusCode == 401) {
           await storageServices.logout();
-          appRoutes.pushReplacement(AppRoutesKey.instance.loginScreen);
+          appRoutes.pushReplacement(AppRoutesKey.instance.splash);
         }
 
         if (e.response?.data["message"].runtimeType != Null) {

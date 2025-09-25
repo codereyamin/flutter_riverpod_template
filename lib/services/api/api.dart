@@ -46,7 +46,7 @@ class AppApi {
               String token = storageServices.getRefreshToken();
               if (token.isEmpty) {
                 await storageServices.logout();
-                appRoutes.pushReplacement(AppRoutesKey.instance.loginScreen);
+                appRoutes.pushReplacement(AppRoutesKey.instance.splash);
                 return handler.next(error);
               }
               final newAccessToken = await reFreshNewAccessToken(token);
@@ -55,7 +55,7 @@ class AppApi {
                 return handler.resolve(await _dio.fetch(error.requestOptions));
               } else {
                 await storageServices.logout();
-                appRoutes.pushReplacement(AppRoutesKey.instance.loginScreen);
+                appRoutes.pushReplacement(AppRoutesKey.instance.splash);
                 return handler.next(error);
               }
             }
