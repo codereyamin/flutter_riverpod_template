@@ -81,4 +81,28 @@ class AppColors {
   final Color white700 = Color(0xffa9a9a9);
   final Color white800 = Color(0xff838383);
   final Color white900 = Color(0xff646464);
+
+  /////////////// purple color
+  final Color purple50 = Color(0xfff4eff9);
+  final Color purple100 = Color(0xffdecdeb);
+  final Color purple200 = Color(0xffcdb4e2);
+  final Color purple300 = Color(0xffb792d4);
+  final Color purple400 = Color(0xffa97dcc);
+  final Color purple500 = Color(0xff935dbf);
+  final Color purple600 = Color(0xff8655ae);
+  final Color purple700 = Color(0xff684288);
+  final Color purple800 = Color(0xff513369);
+  final Color purple900 = Color(0xff3e2750);
+
+  /////////////// orange color
+  final Color orange50 = Color(0xfffef2ef);
+  final Color orange100 = Color(0xfffdd7cd);
+  final Color orange200 = Color(0xfffcc3b5);
+  final Color orange300 = Color(0xfffaa893);
+  final Color orange400 = Color(0xfff9977e);
+  final Color orange500 = Color(0xfff87d5e);
+  final Color orange600 = Color(0xffe27256);
+  final Color orange700 = Color(0xffb05943);
+  final Color orange800 = Color(0xff884534);
+  final Color orange900 = Color(0xff683527);
 }
