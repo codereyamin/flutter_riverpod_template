@@ -59,6 +59,19 @@ class AppColors {
   final Color black700 = Color(0xff0c0f11);
   final Color black800 = Color(0xff090c0d);
   final Color black900 = Color(0xff07090a);
+
+  /////////////////////////////////// dark color
+  final Color dark50 = const Color(0xffe9e9e9);
+  final Color dark100 = const Color(0xffbababa);
+  final Color dark200 = const Color(0xff999999);
+  final Color dark300 = const Color(0xff6b6b6b);
+  final Color dark400 = const Color(0xff4e4e4e);
+  final Color dark500 = const Color(0xff222222);
+  final Color dark600 = const Color(0xff1f1f1f);
+  final Color dark700 = const Color(0xff181818);
+  final Color dark800 = const Color(0xff131313);
+  final Color dark900 = const Color(0xff0e0e0e);
+
   ////////////////  app Text black color
   final Color textBlack50 = Color(0xffebebeb);
   final Color textBlack100 = Color(0xffc0c0c0);
