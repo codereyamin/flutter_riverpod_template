@@ -30,36 +30,46 @@ class _MainAppEntryState extends ConsumerState<MainAppEntry> {
   Widget build(BuildContext context) {
     /////////////////
     AppSize.size = MediaQuery.of(context).size;
-    final ThemeMode themeMode = ref.watch(themeProvider);
 
     //////////////// main services
-    return ProviderScope(
-      key: providerKey,
-      observers: [LoggerObServer()],
-      child: MaterialApp.router(
-        scaffoldMessengerKey: rootScaffoldMessengerKey,
-        debugShowCheckedModeBanner: false,
-        routerConfig: appRoutes.router,
-        title: "Flutter",
-        color: Colors.white,
-        themeAnimationCurve: Curves.easeInOut,
-        themeAnimationDuration: Duration.zero,
-        theme: AppThemeConfiguration.instance.lightThemeData,
-        darkTheme: AppThemeConfiguration.instance.darkThemeData,
-        themeMode: themeMode,
+    return ProviderScope(key: providerKey, observers: [LoggerObServer()], child: MainApp());
+  }
+}
 
-        builder: (context, child) {
-          ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
-            return const ErrorScreen();
-          };
-          if (child == null) return const SizedBox();
+class MainApp extends ConsumerStatefulWidget {
+  const MainApp({super.key});
 
-          return Overlay(
-            key: appOverlayKey,
-            initialEntries: [OverlayEntry(builder: (context) => child)],
-          );
-        },
-      ),
+  @override
+  ConsumerState<MainApp> createState() => _MainAppState();
+}
+
+class _MainAppState extends ConsumerState<MainApp> {
+  @override
+  Widget build(BuildContext context) {
+    final ThemeMode themeMode = ref.watch(themeProvider);
+    return MaterialApp.router(
+      scaffoldMessengerKey: rootScaffoldMessengerKey,
+      debugShowCheckedModeBanner: false,
+      routerConfig: appRoutes.router,
+      title: "Flutter",
+      color: Colors.white,
+      themeAnimationCurve: Curves.easeInOut,
+      themeAnimationDuration: Duration.zero,
+      theme: AppThemeConfiguration.instance.lightThemeData,
+      darkTheme: AppThemeConfiguration.instance.darkThemeData,
+      themeMode: themeMode,
+
+      builder: (context, child) {
+        ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
+          return const ErrorScreen();
+        };
+        if (child == null) return const SizedBox();
+
+        return Overlay(
+          key: appOverlayKey,
+          initialEntries: [OverlayEntry(builder: (context) => child)],
+        );
+      },
     );
   }
 }

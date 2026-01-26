@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod_template/constant/app_colors.dart';
 import 'package:flutter_riverpod_template/main_app_entry.dart';
-import 'package:flutter_riverpod_template/services/storage/storage_services.dart';
 import 'package:flutter_riverpod_template/widgets/texts/app_date_time_formate.dart';
 
 Future<void> main() async {
@@ -28,8 +27,7 @@ Future<void> main() async {
   );
   ////////////// network
   HttpOverrides.global = MyHttpOverrides();
-  //////////////////// storage services Initialize
-  await StorageServices.instance.init();
+
   runApp(const MainAppEntry());
   ////////// time formate
   await AppDateTimeFormate.instance.initial();

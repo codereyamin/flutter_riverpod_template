@@ -4,4 +4,5 @@ class AppConstant {
   static AppConstant get instance => _instance;
   ///////////////data
   final String fontFamilyPoppins = "Poppins";
+  final String font = "Poppins";
 }

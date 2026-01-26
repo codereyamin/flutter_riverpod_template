@@ -13,7 +13,7 @@ class ThemeNotifier extends StateNotifier<ThemeMode> {
 
   Future<void> _init() async {
     try {
-      isDarkMode = storageServices.isDarkMode();
+      isDarkMode = await storageServices.isDarkMode();
       state = isDarkMode ? ThemeMode.dark : ThemeMode.light;
     } catch (e) {
       errorLog("_init. ThemeNotifier", e);

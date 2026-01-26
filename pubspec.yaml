@@ -6,7 +6,7 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.8.1
+  sdk: ^3.9.2
 
 dependencies:
   flutter:
@@ -18,7 +18,7 @@ dependencies:
   go_router: ^17.0.0
 
   # storage
-  get_storage: ^2.1.1
+  shared_preferences: ^2.5.4
 
   # api services
   dio: ^5.9.0
@@ -31,6 +31,10 @@ dependencies:
   # time zone related 
   flutter_timezone: ^4.1.1
   timezone: ^0.10.1
+
+  # translator
+  translator: ^1.0.4+1
+  html: ^0.15.6
 
   # image related 
   cached_network_image: ^3.4.1

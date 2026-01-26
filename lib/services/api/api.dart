@@ -29,7 +29,7 @@ class AppApi {
           options.contentType = 'application/json';
           options.headers["Accept"] = "application/json";
 
-          String token = storageServices.getToken();
+          String token = await storageServices.getToken();
           if (token.isNotEmpty) {
             options.headers["Authorization"] = "Bearer $token";
           }
@@ -37,13 +37,19 @@ class AppApi {
           return handler.next(options); // Continue request
         },
         onError: (error, handler) async {
-          appLog("API error occurred:");
-          appLog("Status code: ${error.response?.statusCode}");
-          appLog("Error message: ${error.message}");
+          appLog("""
+
+API error occurred:
+
+Status code: ${error.response?.statusCode}
+
+Error message: ${error.message}
+
+""");
 
           try {
             if (error.response?.statusCode == 401) {
-              String token = storageServices.getRefreshToken();
+              String token = await storageServices.getRefreshToken();
               if (token.isEmpty) {
                 await storageServices.logout();
                 appRoutes.pushReplacement(AppRoutesKey.instance.splash);
@@ -67,8 +73,7 @@ class AppApi {
           return handler.next(error); // Continue with error
         },
       ),
-      if (kDebugMode)
-        PrettyDioLogger(requestHeader: true, request: true, compact: true, error: true, requestBody: true, responseHeader: true, responseBody: true),
+      if (kDebugMode) PrettyDioLogger(requestHeader: true, request: true, compact: true, error: true, requestBody: true, responseHeader: true, responseBody: true),
     });
   }
   Dio get sendRequest => _dio;
