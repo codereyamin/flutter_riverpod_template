@@ -74,6 +74,7 @@ class _AppTextState extends ConsumerState<AppText> {
       decoration: widget.decoration,
       decorationColor: widget.decorationColor,
     );
+
     if (!widget.isDynamic) {
       return Text(
         widget.text,
