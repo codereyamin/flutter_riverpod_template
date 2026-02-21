@@ -33,19 +33,28 @@ class CustomExpansionTile extends StatefulWidget {
   State createState() => CustomExpansionTileState();
 }
 
-class CustomExpansionTileState extends State<CustomExpansionTile> with SingleTickerProviderStateMixin {
+class CustomExpansionTileState extends State<CustomExpansionTile>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _animation;
   late bool _isExpanded;
-  isOpen() => _isExpanded;
+  bool isOpen() => _isExpanded;
 
   @override
   void initState() {
     super.initState();
     try {
       _isExpanded = widget.initiallyExpanded;
-      _controller = AnimationController(duration: widget.duration, reverseDuration: widget.duration, vsync: this);
-      _animation = CurvedAnimation(parent: _controller, curve: widget.curve, reverseCurve: widget.reverseCurve);
+      _controller = AnimationController(
+        duration: widget.duration,
+        reverseDuration: widget.duration,
+        vsync: this,
+      );
+      _animation = CurvedAnimation(
+        parent: _controller,
+        curve: widget.curve,
+        reverseCurve: widget.reverseCurve,
+      );
 
       if (_isExpanded) {
         _controller.forward();
@@ -120,14 +129,19 @@ class CustomExpansionTileState extends State<CustomExpansionTile> with SingleTic
                 Expanded(child: widget.title),
                 AnimatedContainer(
                   duration: Durations.medium4,
-                  child: _isExpanded ? Icon(Icons.expand_less_outlined) : Icon(Icons.expand_more_outlined),
+                  child: _isExpanded
+                      ? Icon(Icons.expand_less_outlined)
+                      : Icon(Icons.expand_more_outlined),
                 ),
               ],
             ),
           ),
           SizeTransition(
             sizeFactor: _animation,
-            child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: widget.children),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: widget.children,
+            ),
           ),
         ],
       ),

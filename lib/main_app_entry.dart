@@ -7,18 +7,19 @@ import 'package:flutter_riverpod_template/utils/app_theme.dart';
 import 'package:flutter_riverpod_template/utils/app_theme_configuration.dart';
 import 'package:flutter_riverpod_template/utils/observer/logger_ob_server.dart';
 
-final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
+final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
+    GlobalKey<ScaffoldMessengerState>();
 final AppRoutes appRoutes = AppRoutes.instance;
 final GlobalKey<OverlayState> appOverlayKey = GlobalKey<OverlayState>();
 
-class MainAppEntry extends ConsumerStatefulWidget {
+class MainAppEntry extends StatefulWidget {
   const MainAppEntry({super.key});
 
   @override
-  ConsumerState<MainAppEntry> createState() => _MainAppEntryState();
+  State<MainAppEntry> createState() => _MainAppEntryState();
 }
 
-class _MainAppEntryState extends ConsumerState<MainAppEntry> {
+class _MainAppEntryState extends State<MainAppEntry> {
   Key providerKey = UniqueKey();
   void resetRiverpod() {
     setState(() {
@@ -32,7 +33,11 @@ class _MainAppEntryState extends ConsumerState<MainAppEntry> {
     AppSize.size = MediaQuery.of(context).size;
 
     //////////////// main services
-    return ProviderScope(key: providerKey, observers: [LoggerObServer()], child: MainApp());
+    return ProviderScope(
+      key: providerKey,
+      observers: [LoggerObServer()],
+      child: MainApp(),
+    );
   }
 }
 
@@ -61,13 +66,17 @@ class _MainAppState extends ConsumerState<MainApp> {
 
       builder: (context, child) {
         ErrorWidget.builder = (FlutterErrorDetails errorDetails) {
-          return const ErrorScreen();
+          return Overlay(
+            key: appOverlayKey,
+            initialEntries: [OverlayEntry(builder: (context) => ErrorScreen())],
+          );
         };
-        if (child == null) return const SizedBox();
 
         return Overlay(
           key: appOverlayKey,
-          initialEntries: [OverlayEntry(builder: (context) => child)],
+          initialEntries: [
+            OverlayEntry(builder: (context) => child ?? SizedBox()),
+          ],
         );
       },
     );

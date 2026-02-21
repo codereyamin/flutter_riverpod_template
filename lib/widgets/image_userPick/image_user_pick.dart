@@ -11,7 +11,7 @@ import 'package:image_picker/image_picker.dart';
 
 import 'package:permission_handler/permission_handler.dart';
 
-void appImageUserTake({localImagePath, required Function(String) callBack}) {
+void appImageUserTake({required Function(String) callBack}) {
   try {
     showBottomSheet(
       context: rootScaffoldMessengerKey.currentState!.context,
@@ -19,7 +19,10 @@ void appImageUserTake({localImagePath, required Function(String) callBack}) {
         return Container(
           margin: EdgeInsets.all(AppSize.height(value: 20.0)),
           padding: EdgeInsets.all(AppSize.height(value: 10.0)),
-          decoration: BoxDecoration(color: AppColors.instance.white500, borderRadius: BorderRadius.circular(AppSize.width(value: 12.0))),
+          decoration: BoxDecoration(
+            color: AppColors.instance.white500,
+            borderRadius: BorderRadius.circular(AppSize.width(value: 12.0)),
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -27,7 +30,9 @@ void appImageUserTake({localImagePath, required Function(String) callBack}) {
                 alignment: Alignment.topRight,
                 child: IconButton(
                   onPressed: () {
-                    Navigator.pop(rootScaffoldMessengerKey.currentState!.context);
+                    Navigator.pop(
+                      rootScaffoldMessengerKey.currentState!.context,
+                    );
                   },
                   icon: const Icon(Icons.close),
                 ),
@@ -37,13 +42,25 @@ void appImageUserTake({localImagePath, required Function(String) callBack}) {
                   Expanded(
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.pop(rootScaffoldMessengerKey.currentState!.context);
-                        appUserImagePic(source: ImageSource.camera, callBack: callBack);
+                        Navigator.pop(
+                          rootScaffoldMessengerKey.currentState!.context,
+                        );
+                        appUserImagePic(
+                          source: ImageSource.camera,
+                          callBack: callBack,
+                        );
                       },
                       child: Column(
                         children: [
-                          Icon(Icons.camera_alt, size: 60, color: AppColors.instance.primary),
-                          const AppText(text: "Camera", fontWeight: FontWeight.w700),
+                          Icon(
+                            Icons.camera_alt,
+                            size: 60,
+                            color: AppColors.instance.primary,
+                          ),
+                          const AppText(
+                            text: "Camera",
+                            fontWeight: FontWeight.w700,
+                          ),
                         ],
                       ),
                     ),
@@ -51,14 +68,26 @@ void appImageUserTake({localImagePath, required Function(String) callBack}) {
                   Expanded(
                     child: GestureDetector(
                       onTap: () {
-                        Navigator.pop(rootScaffoldMessengerKey.currentState!.context);
+                        Navigator.pop(
+                          rootScaffoldMessengerKey.currentState!.context,
+                        );
 
-                        appUserImagePic(source: ImageSource.gallery, callBack: callBack);
+                        appUserImagePic(
+                          source: ImageSource.gallery,
+                          callBack: callBack,
+                        );
                       },
                       child: Column(
                         children: [
-                          Icon(Icons.collections, size: 60, color: AppColors.instance.primary),
-                          const AppText(text: "Gallery", fontWeight: FontWeight.w700),
+                          Icon(
+                            Icons.collections,
+                            size: 60,
+                            color: AppColors.instance.primary,
+                          ),
+                          const AppText(
+                            text: "Gallery",
+                            fontWeight: FontWeight.w700,
+                          ),
                         ],
                       ),
                     ),
@@ -76,7 +105,10 @@ void appImageUserTake({localImagePath, required Function(String) callBack}) {
   }
 }
 
-Future<void> appUserImagePic({required ImageSource source, required Function(String) callBack}) async {
+Future<void> appUserImagePic({
+  required ImageSource source,
+  required Function(String) callBack,
+}) async {
   try {
     bool permissionGranted = false;
 
@@ -89,7 +121,8 @@ Future<void> appUserImagePic({required ImageSource source, required Function(Str
       if (status.isDenied) {
         var response = await askFirst(
           title: "Camera Access Required",
-          content: """We need access to your camera so you can update your profile picture""",
+          content:
+              """We need access to your camera so you can update your profile picture""",
           acceptButton: "Continue",
         );
         if (response) {
@@ -218,7 +251,8 @@ Your data is never shared and stays on your device unless you choose to upload i
 
 Future<bool> askFirst({
   String title = "Gallery",
-  String content = "This permission is required to continue. Please enable it from settings.",
+  String content =
+      "This permission is required to continue. Please enable it from settings.",
   String acceptButton = "Continue",
   String cancelButton = "Cancel",
 }) async {
@@ -254,7 +288,8 @@ Future<bool> askFirst({
 
 Future<bool> getCallAgainPermission({
   String title = "Gallery",
-  String content = "This permission is required to continue. Please enable it from settings.",
+  String content =
+      "This permission is required to continue. Please enable it from settings.",
   String acceptButton = "Open Settings",
   String cancelButton = "Cancel",
 }) async {
@@ -274,7 +309,9 @@ Future<bool> getCallAgainPermission({
                   child: ElevatedButton(
                     onPressed: () async {
                       userConfirmed = false;
-                      Navigator.pop(rootScaffoldMessengerKey.currentState!.context);
+                      Navigator.pop(
+                        rootScaffoldMessengerKey.currentState!.context,
+                      );
                     },
                     child: AppText(text: cancelButton),
                   ),
@@ -286,7 +323,9 @@ Future<bool> getCallAgainPermission({
                   child: ElevatedButton(
                     onPressed: () async {
                       userConfirmed = true;
-                      Navigator.pop(rootScaffoldMessengerKey.currentState!.context);
+                      Navigator.pop(
+                        rootScaffoldMessengerKey.currentState!.context,
+                      );
                     },
                     child: AppText(text: acceptButton),
                   ),

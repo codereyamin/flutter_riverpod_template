@@ -1,36 +1,25 @@
 import 'package:flutter_riverpod_template/utils/app_log.dart';
-import 'package:flutter_timezone/flutter_timezone.dart';
-import 'package:timezone/data/latest.dart' as tz;
-import 'package:timezone/standalone.dart' as tz;
+
 
 class AppDateTimeFormate {
   AppDateTimeFormate._privateConstructor();
   static final AppDateTimeFormate _instance = AppDateTimeFormate._privateConstructor();
   static AppDateTimeFormate get instance => _instance;
 
-  String? userTimezone;
 
-  Future<void> initial() async {
-    try {
-      userTimezone = await FlutterTimezone.getLocalTimezone();
-    } catch (e) {
-      errorLog("initial", e);
-    }
-  }
 
   String timeFormateTextMonthYear(String? inputDateTime) {
     try {
       if (inputDateTime == null) return "";
       DateTime? dateTime = DateTime.tryParse(inputDateTime);
       if (dateTime == null) return "";
-      tz.initializeTimeZones();
-      DateTime utcTime = dateTime.toUtc();
-      tz.Location location = tz.getLocation(userTimezone ?? 'America/Detroit');
-      tz.TZDateTime localTime = tz.TZDateTime.from(utcTime, location);
+
+      DateTime utcTime = dateTime.toLocal();
+    
       const List<String> monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-      String month = monthNames[localTime.month - 1];
-      int year = localTime.year;
+      String month = monthNames[utcTime.month - 1];
+      int year = utcTime.year;
       return "$month $year";
     } catch (e) {
       errorLog("timeFormateTextMonthYear", e);
@@ -43,10 +32,8 @@ class AppDateTimeFormate {
       if (inputDateTime == null) return "";
       DateTime? dateTime = DateTime.tryParse(inputDateTime);
       if (dateTime == null) return "";
-      tz.initializeTimeZones();
-      DateTime utcTime = dateTime.toUtc();
-      tz.Location location = tz.getLocation(userTimezone ?? 'America/Detroit');
-      tz.TZDateTime localTime = tz.TZDateTime.from(utcTime, location);
+      DateTime localTime = dateTime.toLocal();
+ 
       const List<String> monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
       String month = monthNames[localTime.month - 1];
@@ -64,10 +51,9 @@ class AppDateTimeFormate {
       if (inputDateTime == null) return "";
       DateTime? dateTime = DateTime.tryParse(inputDateTime);
       if (dateTime == null) return "";
-      tz.initializeTimeZones();
-      DateTime utcTime = dateTime.toUtc();
-      tz.Location location = tz.getLocation(userTimezone ?? 'America/Detroit');
-      tz.TZDateTime localTime = tz.TZDateTime.from(utcTime, location);
+
+      DateTime localTime = dateTime.toLocal();
+
       const List<String> monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
       String month = monthNames[localTime.month - 1];
@@ -85,20 +71,10 @@ class AppDateTimeFormate {
       if (inputDateTime == null) return "";
       if (inputDateTime.isEmpty) return "";
       // Parse the input string to DateTime
-      DateTime? tryDate = DateTime.tryParse(inputDateTime);
+      DateTime? localTime = DateTime.tryParse(inputDateTime);
 
-      if (tryDate == null) return "";
-      // Initialize timezone database
-      tz.initializeTimeZones();
+      if (localTime == null) return "";
 
-      // Parse the ISO UTC time
-      DateTime utcTime = DateTime.parse(inputDateTime).toUtc();
-
-      // Get the location for the user's timezone
-      tz.Location location = tz.getLocation(userTimezone ?? 'America/Detroit');
-
-      // Convert UTC to the user's local time
-      tz.TZDateTime localTime = tz.TZDateTime.from(utcTime, location);
       const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
       // Extract month, day, year, hour, and minute
       String month = months[localTime.month - 1];
@@ -128,15 +104,12 @@ class AppDateTimeFormate {
   String timePeriod(String? inputDateTime) {
     try {
       if (inputDateTime == null) return "";
-      DateTime? tryDate = DateTime.tryParse(inputDateTime);
+      DateTime? localTime = DateTime.tryParse(inputDateTime)?.toLocal();
 
-      if (tryDate == null) return "";
-      tz.initializeTimeZones();
-      DateTime utcTime = DateTime.parse(inputDateTime).toUtc();
-      tz.Location location = tz.getLocation(userTimezone ?? 'America/Detroit');
-      tz.TZDateTime localTime = tz.TZDateTime.from(utcTime, location);
+      if (localTime == null) return "";
+    
 
-      final DateTime now = DateTime.now();
+      final DateTime now = DateTime.now().toLocal();
       final Duration difference = now.difference(localTime);
 
       if (difference.inDays == 0) {

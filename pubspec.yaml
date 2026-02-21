@@ -6,7 +6,7 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.9.2
+  sdk: ^3.10.0
 
 dependencies:
   flutter:
@@ -27,10 +27,6 @@ dependencies:
   pretty_dio_logger: ^1.4.0
   socket_io_client: ^3.1.2
   connectivity_plus: ^7.0.0
-
-  # time zone related 
-  flutter_timezone: ^4.1.1
-  timezone: ^0.10.1
 
   # translator
   translator: ^1.0.4+1
@@ -53,7 +49,6 @@ dependencies:
   firebase_messaging: ^16.0.4
   firebase_core: ^4.2.1
   device_info_plus: ^12.1.0
-  flutter_native_splash: ^2.4.7
 
 dev_dependencies:
   flutter_test:
@@ -63,32 +58,7 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   change_app_package_name: ^1.5.0
 
-# native splash screen configure
-flutter_native_splash:
-  color: "#9558B7"
-  color_dark: "#9558B7"
-  android: true
-  ios: true
-  image: assets/images/native_logo.png
-  image_dark: assets/images/native_logo.png
-  background_image: assets/images/native_plash.png
-  background_image_dark: assets/images/native_plash.png
-  android_gravity: center
-  ios_content_mode: scaleAspectFit
-  fullscreen: true  
 
-android_12:
-  color: "#9558B7"
-  color_dark: "#9558B7"
-  android: true
-  ios: true
-  image: assets/images/native_logo.png
-  image_dark: assets/images/native_logo.png
-  background_image: assets/images/native_plash.png
-  background_image_dark: assets/images/native_plash.png
-  android_gravity: center
-  ios_content_mode: scaleAspectFit
-  fullscreen: true  
 
 flutter:
 
@@ -97,7 +67,6 @@ flutter:
 # local all assets
   assets:
     - assets/fonts/
-    - assets/logo/
     - assets/images/
     - assets/icons/
 

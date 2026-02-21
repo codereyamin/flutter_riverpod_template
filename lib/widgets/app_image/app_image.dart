@@ -52,7 +52,10 @@ class AppImage extends StatelessWidget {
                       height: height,
                       fit: fit,
                       errorBuilder: (context, error, stackTrace) {
-                        errorLog("Error loading file image: $error", stackTrace);
+                        errorLog(
+                          "Error loading file image: $error",
+                          stackTrace,
+                        );
                         return _errorPlaceholder();
                       },
                     ),
@@ -79,11 +82,26 @@ class AppImage extends StatelessWidget {
         onTap: isZomBle
             ? () {
                 if (isZomBle) {
-                  _showFullScreenImage(context, NetworkImageWithRetry(key: UniqueKey(), imageUrl: url!, width: width, height: height, fit: fit));
+                  _showFullScreenImage(
+                    context,
+                    NetworkImageWithRetry(
+                      key: UniqueKey(),
+                      imageUrl: url!,
+                      width: width,
+                      height: height,
+                      fit: fit,
+                    ),
+                  );
                 }
               }
             : null,
-        child: NetworkImageWithRetry(key: UniqueKey(), imageUrl: url!, width: width, height: height, fit: fit),
+        child: NetworkImageWithRetry(
+          key: UniqueKey(),
+          imageUrl: url!,
+          width: width,
+          height: height,
+          fit: fit,
+        ),
       );
     }
 
@@ -102,7 +120,10 @@ class AppImage extends StatelessWidget {
                       fit: fit,
                       color: iconColor,
                       errorBuilder: (context, error, stackTrace) {
-                        errorLog("Error loading asset image: $error", stackTrace);
+                        errorLog(
+                          "Error loading asset image: $error",
+                          stackTrace,
+                        );
                         return _errorPlaceholder();
                       },
                     ),
@@ -130,7 +151,8 @@ class AppImage extends StatelessWidget {
       height: height,
       color: color ?? AppColors.instance.white200,
       child: Image.asset(
-        networkPlaceholderImage ?? AppAssertsImagePath.instance.networkPlaceholderImage,
+        networkPlaceholderImage ??
+            AppAssertsImagePath.instance.networkPlaceholderImage,
         width: width,
         height: height,
         fit: fit,
@@ -153,7 +175,12 @@ class AppImage extends StatelessWidget {
   }
 
   void _showFullScreenImage(BuildContext context, Widget imageWidget) {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => FullScreenImageViewer(image: imageWidget)));
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => FullScreenImageViewer(image: imageWidget),
+      ),
+    );
   }
 }
 
@@ -166,7 +193,8 @@ class FullScreenImageViewer extends StatefulWidget {
   State<FullScreenImageViewer> createState() => _FullScreenImageViewerState();
 }
 
-class _FullScreenImageViewerState extends State<FullScreenImageViewer> with SingleTickerProviderStateMixin {
+class _FullScreenImageViewerState extends State<FullScreenImageViewer>
+    with SingleTickerProviderStateMixin {
   late AnimationController animationController;
   Animation<Matrix4>? zoomAnimation;
   late TransformationController transformationController;
@@ -175,10 +203,13 @@ class _FullScreenImageViewerState extends State<FullScreenImageViewer> with Sing
     try {
       transformationController = TransformationController();
 
-      animationController = AnimationController(vsync: this, duration: const Duration(milliseconds: 300))
-        ..addListener(() {
-          transformationController.value = zoomAnimation!.value;
-        });
+      animationController =
+          AnimationController(
+            vsync: this,
+            duration: const Duration(milliseconds: 300),
+          )..addListener(() {
+            transformationController.value = zoomAnimation!.value;
+          });
     } catch (e) {
       errorLog("onAppInitial", e);
     }
@@ -189,7 +220,9 @@ class _FullScreenImageViewerState extends State<FullScreenImageViewer> with Sing
   }
 
   void handleDoubleTap() {
-    final newValue = transformationController.value.isIdentity() ? _applyZoom() : _revertZoom();
+    final newValue = transformationController.value.isIdentity()
+        ? _applyZoom()
+        : _revertZoom();
 
     zoomAnimation = Matrix4Tween(
       begin: transformationController.value,
@@ -208,7 +241,7 @@ class _FullScreenImageViewerState extends State<FullScreenImageViewer> with Sing
 
   Matrix4 _revertZoom() => Matrix4.identity();
 
-  appClose() {
+  void appClose() {
     try {
       transformationController.dispose();
       animationController.dispose();
@@ -259,13 +292,20 @@ class NetworkImageWithRetry extends StatefulWidget {
   final double? height;
   final BoxFit? fit;
 
-  const NetworkImageWithRetry({super.key, required this.imageUrl, this.fit, this.height, this.width});
+  const NetworkImageWithRetry({
+    super.key,
+    required this.imageUrl,
+    this.fit,
+    this.height,
+    this.width,
+  });
 
   @override
   State<NetworkImageWithRetry> createState() => _NetworkImageWithRetryState();
 }
 
-class _NetworkImageWithRetryState extends State<NetworkImageWithRetry> with AutomaticKeepAliveClientMixin {
+class _NetworkImageWithRetryState extends State<NetworkImageWithRetry>
+    with AutomaticKeepAliveClientMixin {
   int retryCount = 0;
   final int maxRetries = 2;
   late String _image;
@@ -348,7 +388,10 @@ class _NetworkImageWithRetryState extends State<NetworkImageWithRetry> with Auto
         width: widget.width ?? double.infinity,
         height: widget.height,
         color: AppColors.instance.white300,
-        child: Image.asset(AppAssertsImagePath.instance.networkPlaceholderImage, fit: BoxFit.fill),
+        child: Image.asset(
+          AppAssertsImagePath.instance.networkPlaceholderImage,
+          fit: BoxFit.fill,
+        ),
       ),
     );
   }
@@ -358,7 +401,10 @@ class _NetworkImageWithRetryState extends State<NetworkImageWithRetry> with Auto
       width: widget.width,
       height: widget.height,
       color: Colors.grey,
-      child: Image.asset(AppAssertsImagePath.instance.networkPlaceholderImage, fit: BoxFit.fill),
+      child: Image.asset(
+        AppAssertsImagePath.instance.networkPlaceholderImage,
+        fit: BoxFit.fill,
+      ),
     );
   }
 
