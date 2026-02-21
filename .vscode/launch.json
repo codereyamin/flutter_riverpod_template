@@ -9,10 +9,10 @@
             "request": "launch",
             "type": "dart",
             "program": "lib/main.dart",
-            "args": [
-                "--web-port",
-                "8080"
-            ]
+            // "args": [
+            //     "--web-port",
+            //     "8080"
+            // ]
         },
         {
             "name": "flutter_riverpod_template (profile mode)",
@@ -20,10 +20,10 @@
             "type": "dart",
             "flutterMode": "profile",
             "program": "lib/main.dart",
-            "args": [
-                "--web-port",
-                "8080"
-            ]
+            // "args": [
+            //     "--web-port",
+            //     "8080"
+            // ]
         },
         {
             "name": "flutter_riverpod_template (release mode)",
@@ -31,10 +31,10 @@
             "type": "dart",
             "flutterMode": "release",
             "program": "lib/main.dart",
-            "args": [
-                "--web-port",
-                "8080"
-            ]
+            // "args": [
+            //     "--web-port",
+            //     "8080"
+            // ]
         }
     ]
 }

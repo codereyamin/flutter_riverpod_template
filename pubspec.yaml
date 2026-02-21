@@ -16,7 +16,8 @@ dependencies:
   flutter_riverpod: ^3.0.3
   # route related 
   go_router: ^17.0.0
-
+  # payment related 
+  app_links: ^7.0.0
   # storage
   shared_preferences: ^2.5.4
 
