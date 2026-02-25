@@ -21,9 +21,9 @@ class ApiServices {
 
   // services
 
-  Future<dynamic> putServices({required String url, dynamic body, int statusCode = 200, Map<String, dynamic>? query}) async {
+  Future<dynamic> putServices({required String url, dynamic body, int statusCode = 200, Map<String, dynamic>? query, Options? options}) async {
     try {
-      final response = await api.sendRequest.put(url, data: body, queryParameters: query);
+      final response = await api.sendRequest.put(url, data: body, queryParameters: query, options: options);
       if (response.statusCode == statusCode) {
         return response.data;
       } else {
@@ -63,9 +63,10 @@ class ApiServices {
     int statusCodeStart = 200,
     int statusCodeEnd = 299,
     Map<String, dynamic>? query,
+    Options? options,
   }) async {
     try {
-      final dynamic response = await AppApi().sendRequest.post(url, data: body);
+      final dynamic response = await AppApi().sendRequest.post(url, data: body, options: options, queryParameters: query);
       if (response.statusCode >= statusCodeStart && response.statusCode <= statusCodeEnd) {
         return response.data;
       } else {
@@ -99,9 +100,9 @@ class ApiServices {
     }
   }
 
-  Future<dynamic> getServices(String url, {int statusCode = 200, Map<String, dynamic>? queryParameters, dynamic body}) async {
+  Future<dynamic> getServices(String url, {int statusCode = 200, Map<String, dynamic>? queryParameters, dynamic body, Options? options}) async {
     try {
-      final response = await api.sendRequest.get(url, queryParameters: queryParameters, data: body);
+      final response = await api.sendRequest.get(url, queryParameters: queryParameters, data: body, options: options);
       if (response.statusCode == statusCode) {
         return response.data;
       } else {

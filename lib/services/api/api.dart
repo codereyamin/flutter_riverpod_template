@@ -26,10 +26,14 @@ class AppApi {
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           options.baseUrl = AppApiUrl.instance.baseUrl;
-          options.contentType = 'application/json';
           options.headers["Accept"] = "application/json";
 
           String token = await storageServices.getToken();
+          if (options.contentType == null) {
+            options.contentType = Headers.jsonContentType;
+          } else {
+            options.contentType ??= 'application/json';
+          }
           if (token.isNotEmpty) {
             options.headers["Authorization"] = "Bearer $token";
           }
@@ -73,7 +77,8 @@ Error message: ${error.message}
           return handler.next(error); // Continue with error
         },
       ),
-      if (kDebugMode) PrettyDioLogger(requestHeader: true, request: true, compact: true, error: true, requestBody: true, responseHeader: true, responseBody: true),
+      if (kDebugMode)
+        PrettyDioLogger(requestHeader: true, request: true, compact: true, error: true, requestBody: true, responseHeader: true, responseBody: true),
     });
   }
   Dio get sendRequest => _dio;
