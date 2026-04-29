@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod_template/error_handling_screen/error_screen.dart';
+import 'package:flutter_riverpod_template/error_handling_screen/error_screen/error_screen.dart';
 import 'package:flutter_riverpod_template/routes/app_routes.dart';
 import 'package:flutter_riverpod_template/utils/app_size.dart';
 import 'package:flutter_riverpod_template/utils/app_theme.dart';
 import 'package:flutter_riverpod_template/utils/app_theme_configuration.dart';
 import 'package:flutter_riverpod_template/utils/observer/logger_ob_server.dart';
 
-final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
-    GlobalKey<ScaffoldMessengerState>();
+final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
 final AppRoutes appRoutes = AppRoutes.instance;
 final GlobalKey<OverlayState> appOverlayKey = GlobalKey<OverlayState>();
 
@@ -33,11 +32,7 @@ class _MainAppEntryState extends State<MainAppEntry> {
     AppSize.size = MediaQuery.of(context).size;
 
     //////////////// main services
-    return ProviderScope(
-      key: providerKey,
-      observers: [LoggerObServer()],
-      child: MainApp(),
-    );
+    return ProviderScope(key: providerKey, observers: [LoggerObServer()], child: MainApp());
   }
 }
 
@@ -74,9 +69,7 @@ class _MainAppState extends ConsumerState<MainApp> {
 
         return Overlay(
           key: appOverlayKey,
-          initialEntries: [
-            OverlayEntry(builder: (context) => child ?? SizedBox()),
-          ],
+          initialEntries: [OverlayEntry(builder: (context) => child ?? SizedBox())],
         );
       },
     );

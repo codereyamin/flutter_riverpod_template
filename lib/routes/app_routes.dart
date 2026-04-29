@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_riverpod_template/error_handling_screen/not_found_screen.dart';
+import 'package:flutter_riverpod_template/error_handling_screen/not_found_screen/not_found_screen.dart';
 import 'package:flutter_riverpod_template/routes/app_routes_key.dart';
 import 'package:flutter_riverpod_template/routes/internet_check_provider.dart';
 import 'package:flutter_riverpod_template/screens/splash_screen/splash_screen.dart';

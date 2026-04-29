@@ -1,0 +1,68 @@
+# .github/workflows/ci.yml
+# Security CI pipeline — runs on every push and PR
+
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  security-and-quality:
+    name: Analyse, Test & Security Scan
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.6'
+          channel: 'stable'
+          cache: true
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Verify no secrets committed
+        run: |
+          # Fail if key.properties was accidentally committed
+          if [ -f android/key.properties ]; then
+            echo "::error::android/key.properties is committed! Remove it and rotate the keystore."
+            exit 1
+          fi
+          # Fail if .env was accidentally committed
+          if [ -f .env ]; then
+            echo "::error::.env is committed! Remove it immediately."
+            exit 1
+          fi
+          echo "Secret file check passed."
+
+      - name: Scan for hardcoded secrets (basic)
+        run: |
+          # Fail if any IP address appears hardcoded in Dart source
+          if grep -r --include="*.dart" -E "http://[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+" lib/; then
+            echo "::error::Hardcoded IP address found in Dart source. Use --dart-define instead."
+            exit 1
+          fi
+          echo "Hardcoded IP check passed."
+
+      - name: Flutter analyse (lint)
+        run: flutter analyze --fatal-infos
+
+      - name: Run tests
+        run: flutter test --coverage
+        env:
+          BASE_URL: https://api.example.com/api/v1
+
+      - name: Build APK (release — verifies dart-define works)
+        run: |
+          flutter build apk --release \
+            --dart-define=BASE_URL=https://api.example.com/api/v1
+        # NOTE: Signing keys come from CI secrets, not committed key.properties
+        # To set up signing in CI, add these GitHub Secrets:
+        #   KEYSTORE_BASE64, KEY_ALIAS, KEY_PASSWORD, STORE_PASSWORD
+        # Then decode and pass via --dart-define or build.gradle env vars

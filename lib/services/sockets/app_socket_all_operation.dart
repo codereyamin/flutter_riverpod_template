@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod_template/constant/app_api_url.dart';
+import 'package:flutter_riverpod_template/services/storage/storage_services.dart';
 import 'package:flutter_riverpod_template/utils/app_log.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
@@ -13,25 +14,18 @@ class AppSocketAllOperation {
 
   bool get isConnected => appRootSocket?.connected == true;
 
-  void initializeSocket() {
+  Future<void> initializeSocket() async {
     if (appRootSocket != null) return;
 
-    _connectSocketToServer();
+    await _connectSocketToServer();
   }
 
   void readEvent({required String event, required void Function(dynamic) handler}) {
     try {
-      // Store the handler for reconnection scenarios
-      if (!_eventHandlers.containsKey(event)) {
-        _eventHandlers[event] = [];
-      }
-      _eventHandlers[event]!.add(handler);
-
-      // If already connected, setup the listener immediately
+      _eventHandlers.putIfAbsent(event, () => []).add(handler);
       if (isConnected) {
         _setupEventListener(event, handler);
       } else {
-        // If not connected, initialize the connection
         initializeSocket();
       }
     } catch (e, stackTrace) {
@@ -40,7 +34,7 @@ class AppSocketAllOperation {
   }
 
   void _setupEventListener(String event, void Function(dynamic) handler) {
-    appRootSocket?.off(event); // Remove existing listeners to avoid duplicates
+    appRootSocket?.off(event);
     appRootSocket?.on(event, (data) {
       appLog("Received event: $event ");
       appLog("with data: $data");
@@ -53,10 +47,8 @@ class AppSocketAllOperation {
       if (isConnected) {
         appRootSocket?.emit(event, data);
       } else {
-        // Queue the emit for when connection is established
-        initializeSocket();
-        _onceConnected(() {
-          appRootSocket?.emit(event, data);
+        initializeSocket().then((_) {
+          _onceConnected(() => appRootSocket?.emit(event, data));
         });
       }
     } catch (e, stackTrace) {
@@ -75,31 +67,34 @@ class AppSocketAllOperation {
         callback();
         appRootSocket?.off('connect', listener);
       } catch (e) {
-        errorLog("listener", e);
+        errorLog("_onceConnected listener", e);
       }
     }
 
     appRootSocket?.on('connect', listener);
   }
 
-  void _connectSocketToServer() {
+  Future<void> _connectSocketToServer() async {
     try {
       if (appRootSocket != null || _isConnecting) return;
-
       _isConnecting = true;
       appLog("Attempting to connect socket...");
-
+      final token = await StorageServices.instance.getToken();
       appRootSocket = io.io(
         AppApiUrl.socket,
-        io.OptionBuilder().setTransports(['websocket']).disableAutoConnect().setExtraHeaders({'foo': 'bar'}).enableReconnection().build(),
+        io.OptionBuilder()
+            .setTransports(['websocket'])
+            .disableAutoConnect()
+            .enableReconnection()
+            .setExtraHeaders({'foo': 'bar', if (token.isNotEmpty) 'Authorization': 'Bearer $token'})
+            .setAuth({if (token.isNotEmpty) 'token': token})
+            .build(),
       );
 
-      // Setup connection listeners
       appRootSocket?.onConnect((_) {
         _isConnecting = false;
         appLog("Socket connected");
 
-        // Re-establish all event listeners using for loops
         for (final entry in _eventHandlers.entries) {
           final event = entry.key;
           final handlers = entry.value;
@@ -128,7 +123,6 @@ class AppSocketAllOperation {
         appLog("Socket reconnected");
       });
 
-      // Start the connection
       appRootSocket?.connect();
     } catch (e, stackTrace) {
       _isConnecting = false;
@@ -138,7 +132,7 @@ class AppSocketAllOperation {
 
   void reconnect() {
     if (!isConnected && !_isConnecting) {
-      _connectSocketToServer();
+      initializeSocket();
     }
   }
 

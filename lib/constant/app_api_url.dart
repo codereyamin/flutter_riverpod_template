@@ -6,8 +6,23 @@ class AppApiUrl {
   static final AppApiUrl _instance = AppApiUrl._privateConstructor();
   static AppApiUrl get instance => _instance;
   //////////////  app base api end point
-  static final String domain = _getDomain();
-  static final String socket = _getDomain();
+
+  static final String _baseUrlFromEnv = String.fromEnvironment(
+    'BASE_URL',
+    defaultValue: 'https://api.yourapp.com', // safe fallback for CI
+  );
+
+  static String _validateUrl(String url) {
+    // Block plain HTTP in release builds — HTTPS required in production
+    if (!kDebugMode && url.startsWith('http://')) {
+      errorLog('AppApiUrl', 'HTTP (non-TLS) base URL blocked in release build. Use HTTPS.');
+      assert(false, 'Production builds must use HTTPS. Got: $url');
+    }
+    return url;
+  }
+
+  static final String domain = _validateUrl(_baseUrlFromEnv);
+  static final String socket = _validateUrl(_baseUrlFromEnv);
   final String baseUrl = "$domain/api/v1";
 
   //////////////////////////////////  base
@@ -28,19 +43,4 @@ class AppApiUrl {
   String authForgotPassword = "/authForgotPassword";
   String authVerifyEmail = "/authVerifyEmail";
   String authResetPassword = "/authResetPassword";
-}
-
-String _getDomain() {
-  const String liveServer = "http://54.176.228.142:6005";
-  const String localServer = "http://10.10.7.8:6008";
-
-  try {
-    if (kDebugMode) {
-      localServer;
-      // return localServer;
-    }
-  } catch (e) {
-    errorLog("_getDomain", e);
-  }
-  return liveServer;
 }

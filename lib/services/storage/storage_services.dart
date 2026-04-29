@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_riverpod_template/services/storage/storage_key.dart';
 import 'package:flutter_riverpod_template/utils/app_log.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class StorageServices {
@@ -10,42 +11,23 @@ class StorageServices {
   static StorageServices get instance => _instance;
 
   ////////////// storage initial
+  // Secure storage (Keychain / Keystore)
+  static const _secure = FlutterSecureStorage(
+    aOptions: AndroidOptions(encryptedSharedPreferences: true, resetOnError: true),
+    iOptions: IOSOptions(accessibility: KeychainAccessibility.unlocked_this_device),
+  );
+
+  //  Non-sensitive preferences
   final Future<SharedPreferences> _pref = SharedPreferences.getInstance();
-
-  /////////////////// user login data store
-  Future<void> setLogDedData(Map<String, String> data) async {
-    try {
-      final pref = await _pref;
-      var formateData = jsonEncode(data);
-      await pref.setString(StorageKey.instance.loginDataStore, formateData);
-    } catch (e) {
-      errorLog("setLogDedData data", e);
-    }
-  }
-
-  Future<Map> getLogDedData() async {
-    try {
-      final pref = await _pref;
-
-      // return _box.read(StorageKey.instance.loginDataStore) ?? {};
-      var response = pref.getString(StorageKey.instance.loginDataStore) ?? "";
-      return jsonDecode(response);
-    } catch (e) {
-      errorLog("getLogDedData", e);
-      return {};
-    }
-  }
 
   ////////////// token storage
   Future<void> setToken(String value) async {
-    final pref = await _pref;
-    await pref.setString(StorageKey.instance.token, value);
+    await _secure.write(key: StorageKey.instance.token, value: value);
   }
 
   Future<String> getToken() async {
     try {
-      final pref = await _pref;
-      return pref.getString(StorageKey.instance.token) ?? "";
+      return await _secure.read(key: StorageKey.instance.token) ?? '';
     } catch (e) {
       errorLog("get token", e);
       return "";
@@ -54,31 +36,62 @@ class StorageServices {
 
   ////////////// refresh token
   Future<void> setRefreshToken(String value) async {
-    final pref = await _pref;
-    await pref.setString(StorageKey.instance.refreshToken, value);
+    await _secure.write(key: StorageKey.instance.refreshToken, value: value);
   }
 
   Future<String> getRefreshToken() async {
     try {
-      final pref = await _pref;
-      return pref.getString(StorageKey.instance.refreshToken) ?? "";
+      return await _secure.read(key: StorageKey.instance.refreshToken) ?? '';
     } catch (e) {
       errorLog("get refreshToken", e);
       return "";
     }
   }
 
+  /////////////////// user login data store
+  Future<void> setLogDedData(Map<String, String> data) async {
+    try {
+      await _secure.write(key: StorageKey.instance.loginDataStore, value: jsonEncode(data));
+    } catch (e) {
+      errorLog("setLogDedData data", e);
+    }
+  }
+
+  Future<Map<String, dynamic>> getLogDedData() async {
+    try {
+      final raw = await _secure.read(key: StorageKey.instance.loginDataStore);
+      if (raw == null || raw.isEmpty) return {};
+      return Map<String, dynamic>.from(jsonDecode(raw) as Map);
+    } catch (e) {
+      errorLog("getLogDedData", e);
+      return {};
+    }
+  }
+
+  //////////// app role
+  Future<String> getAppRoll() async {
+    try {
+      return await _secure.read(key: StorageKey.instance.appUserRollData) ?? 'user';
+    } catch (e) {
+      errorLog('getAppRoll', e);
+      return 'user';
+    }
+  }
+
+  Future<void> setAppRoll(String value) async {
+    await _secure.write(key: StorageKey.instance.appUserRollData, value: value);
+  }
+
   /// Logout (clear all data)
   Future<void> logout() async {
     try {
-      final pref = await _pref;
-      await pref.setString(StorageKey.instance.refreshToken, "");
-      await pref.setString(StorageKey.instance.token, "");
-      await pref.setString(StorageKey.instance.appUserRollData, "");
+      await _secure.deleteAll();
     } catch (e) {
       errorLog("logout", e);
     }
   }
+
+  //////////////////////////// Non-sensitive preferences (SharedPreferences OK)
 
   //////////// language
   Future<String> getLanguage() async {
@@ -89,17 +102,6 @@ class StorageServices {
   Future<void> setLanguage(String value) async {
     final pref = await _pref;
     await pref.setString(StorageKey.instance.language, value);
-  }
-
-  //////////// app role
-  Future<String> getAppRoll() async {
-    final pref = await _pref;
-    return pref.getString(StorageKey.instance.appUserRollData) ?? "owner";
-  }
-
-  Future<void> setAppRoll(String value) async {
-    final pref = await _pref;
-    await pref.setString(StorageKey.instance.appUserRollData, value);
   }
 
   //////////// first time flag

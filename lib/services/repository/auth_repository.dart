@@ -15,7 +15,7 @@ class AuthRepository {
   static AuthRepository get instance => _instance;
 
   /////////////// object
-  ApiServices apiServices = ApiServices.instance;
+  final ApiServices apiServices = ApiServices.instance;
   NonAuthApi nonAuthApi = NonAuthApi();
   AppApiUrl api = AppApiUrl.instance;
   StorageServices storageServices = StorageServices.instance;
@@ -31,19 +31,19 @@ class AuthRepository {
 
       var response = await apiServices.postServices(url: api.login, body: bodyData);
       if (response != null) {
-        if (response["data"] != null && response["data"] is Map) {
+        if (response["data"] is Map) {
           var data = response["data"];
-          if (data["role"] != null && data["role"] is String) {
+          if (data["role"] is String) {
             await storageServices.setAppRoll(data["role"].toString());
           }
-          if (data["accessToken"] != null && data["accessToken"] is String) {
+          if (data["accessToken"] is String) {
             await storageServices.setToken(data["accessToken"].toString());
           }
-          if (data["refreshToken"] != null && data["refreshToken"] is String) {
+          if (data["refreshToken"] is String) {
             await storageServices.setRefreshToken(data["refreshToken"].toString());
           }
+          return true;
         }
-        return true;
       }
     } catch (e) {
       errorLog("login function repo", e);

@@ -22,11 +22,9 @@ Future<void> main() async {
     ),
   );
   ////////////// network
-  HttpOverrides.global = MyHttpOverrides();
+  ////// HttpOverrides.global = MyHttpOverrides(); //// use when i work local with http
 
   runApp(const MainAppEntry());
-
-
 }
 
 class MyHttpOverrides extends HttpOverrides {

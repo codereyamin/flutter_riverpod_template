@@ -9,13 +9,16 @@ Command to get SHA1 key: keytool -list -v -keystore key.jks
 ===============================================
 
 ===============================================
+key file making need following below information 
 
-first and last name: Tuhin
-name of your organizational : Tuhin
-name of your City : Dhaka
-two-letter country code :BD
-State or Province : Dhaka
-password : tuhin12345678
+first and last name: 
+name of your organizational : 
+name of your organizational unit: 
+name of your City : 
+State or Province :
+State or country :
+two-letter country code :
+password : 
 
 
 ==================================================

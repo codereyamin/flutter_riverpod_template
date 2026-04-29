@@ -20,6 +20,10 @@ dependencies:
   app_links: ^7.0.0
   # storage
   shared_preferences: ^2.5.5
+  # #1 Secure token storage (Android Keystore / iOS Keychain)
+  flutter_secure_storage: ^8.1.0
+  # environment secure variable
+  flutter_dotenv: ^6.0.1
 
   # api services
   dio: ^5.9.2
@@ -69,6 +73,7 @@ flutter:
     - assets/fonts/
     - assets/images/
     - assets/icons/
+    - .env # environment file add asset
 
   # local all font
   fonts:
